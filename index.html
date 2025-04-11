@@ -430,11 +430,6 @@ function populateTable(years, type) {
   data.forEach(row => {
     const tr = document.createElement('tr');
     
-    // Add highlight class for 2024 players (only for batting)
-    if (type === 'batting' && isRecentSeason(row)) {
-      tr.classList.add('highlight-row');
-    }
-    
     // Create each cell in the row
     const rankCell = document.createElement('td');
     rankCell.className = 'rank-cell';
