@@ -96,10 +96,15 @@ h2 {
 table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 14px; /* Smaller font for tables */
-  table-layout: fixed;
+  font-size: 14px;
+  table-layout: fixed !important; /* This is crucial */
 }
 
+/* Set explicit widths for other columns so they don't push the rank column wider */
+th:nth-child(2), td:nth-child(2) { width: 40%; } /* Player column */
+th:nth-child(3), td:nth-child(3) { width: 25%; } /* Years column */
+th:nth-child(4), td:nth-child(4) { width: calc(35% - 25px); } /* WAR column */
+    
 thead {
   position: sticky;
   top: 0;
@@ -135,12 +140,17 @@ td {
   overflow-y: auto;
 }
 
+th:first-child, /* First column header */
+td:first-child, /* First column cells */
 .rank-cell {
-  font-weight: bold;
-  width: 20px; /* Reduce from current 40px to a smaller value */
-  min-width: 20px; /* Add min-width to enforce the narrow size */
-  max-width: 20px; /* Add max-width to prevent expansion */
-  color: #666;
+  width: 25px !important;
+  min-width: 25px !important;
+  max-width: 25px !important;
+  padding-left: 5px !important;
+  padding-right: 5px !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+  text-align: center !important;
 }
 
 .player-cell {
