@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Top Pitching WAR Stretches</title>
+  <title>Top MLB WAR Stretches</title>
   <style>
     body {
       font-family: "Helvetica Neue", Arial, sans-serif;
-      max-width: 750px;
+      max-width: 1500px;
       margin: 0 auto;
       padding: 20px;
       background-color: #f5f5f5;
@@ -15,22 +15,51 @@
     
     h1 {
       font-weight: bold;
+      font-size: 28px;
+      margin-bottom: 5px;
+      color: #111;
+      text-align: center;
+    }
+    
+    .main-subtitle {
+      font-size: 16px;
+      color: #666;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+    
+    /* This is the key container that puts tables side by side */
+    .tables-container {
+      display: flex;
+      flex-direction: row; /* Explicitly set to row */
+      gap: 30px;
+      justify-content: space-between;
+      width: 100%;
+    }
+    
+    /* Each table container takes exactly 50% minus gap */
+    .table-section {
+      width: calc(50% - 15px);
+      background-color: white;
+      border-radius: 4px;
+      padding: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      margin-bottom: 0;
+      box-sizing: border-box;
+    }
+    
+    .table-title {
+      font-weight: bold;
       font-size: 24px;
       margin-bottom: 5px;
       color: #111;
     }
     
-    .subtitle {
+    .table-subtitle {
       font-size: 16px;
       color: #666;
       margin-bottom: 20px;
-    }
-    
-    .container {
-      background-color: white;
-      border-radius: 4px;
-      padding: 20px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      text-align: center;
     }
     
     .tabs {
@@ -66,6 +95,7 @@
       width: 100%;
       border-collapse: collapse;
       font-size: 15px;
+      table-layout: fixed;
     }
     
     thead {
@@ -118,47 +148,188 @@
       font-size: 13px;
       color: #888;
       font-style: italic;
+      text-align: center;
     }
     
     tr:hover {
       background-color: #f9f9f9;
     }
+    
+    .highlight-row {
+      background-color: #fff8f0;
+    }
+
+    /* Modified media query to ensure tables stay side-by-side until very small screens */
+    @media (max-width: 900px) {
+      .tables-container {
+        flex-direction: column;
+      }
+      
+      .table-section {
+        width: 100%;
+        margin-bottom: 30px;
+      }
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Top Pitching WAR Stretches (2000-2024)</h1>
-    <div class="subtitle">Best single-season and multi-year pitching performances by WAR</div>
-    
-    <div class="tabs">
-      <div class="tab active" data-years="1">1-Year Peak</div>
-      <div class="tab" data-years="3">3-Year Peak</div>
-      <div class="tab" data-years="5">5-Year Peak</div>
+  <h1>Top MLB WAR Stretches (2000-2024)</h1>
+  <div class="main-subtitle">Best single-season and multi-year performances by WAR</div>
+  
+  <div class="tables-container">
+    <!-- Batting WAR Table -->
+    <div class="table-section">
+      <div class="table-title">Batting WAR</div>
+      <div class="table-subtitle">Best hitter performances</div>
+      
+      <div class="tabs batting-tabs">
+        <div class="tab active" data-years="1" data-type="batting">1-Year Peak</div>
+        <div class="tab" data-years="3" data-type="batting">3-Year Peak</div>
+        <div class="tab" data-years="5" data-type="batting">5-Year Peak</div>
+      </div>
+      
+      <div class="table-container">
+        <table id="batting-war-table">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Player</th>
+              <th>Years</th>
+              <th>Avg. WAR</th>
+              <th>Total WAR</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Data will be populated with JavaScript -->
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="footer-note">
+        Data represents the best batting WAR stretches for MLB players since 2000.
+      </div>
     </div>
     
-    <div class="table-container">
-      <table id="war-table">
-        <thead>
-          <tr>
-            <th>Rank</th>
-            <th>Player</th>
-            <th>Years</th>
-            <th>Avg. WAR</th>
-            <th>Total WAR</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
-    
-    <div class="footer-note">
-      Data represents the best WAR stretches for MLB pitchers since 2000.
+    <!-- Pitching WAR Table -->
+    <div class="table-section">
+      <div class="table-title">Pitching WAR</div>
+      <div class="table-subtitle">Best pitcher performances</div>
+      
+      <div class="tabs pitching-tabs">
+        <div class="tab active" data-years="1" data-type="pitching">1-Year Peak</div>
+        <div class="tab" data-years="3" data-type="pitching">3-Year Peak</div>
+        <div class="tab" data-years="5" data-type="pitching">5-Year Peak</div>
+      </div>
+      
+      <div class="table-container">
+        <table id="pitching-war-table">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Player</th>
+              <th>Years</th>
+              <th>Avg. WAR</th>
+              <th>Total WAR</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Data will be populated with JavaScript -->
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="footer-note">
+        Data represents the best pitching WAR stretches for MLB pitchers since 2000.
+      </div>
     </div>
   </div>
 
   <script>
-    // Data for each table
-    const tableData = {
+    // Mock data structure - replace with your actual data
+    const battingData = {
+      '1': [
+        { rank: 1, player: 'Barry Bonds', startYear: 2002, endYear: 2002, avgWAR: 12.7, totalWAR: 12.7 },
+        { rank: 2, player: 'Aaron Judge', startYear: 2024, endYear: 2024, avgWAR: 11.2, totalWAR: 11.2 },
+        { rank: 3, player: 'Bobby Witt Jr.', startYear: 2024, endYear: 2024, avgWAR: 10.4, totalWAR: 10.4 },
+        { rank: 4, player: 'Mookie Betts', startYear: 2018, endYear: 2018, avgWAR: 10.2, totalWAR: 10.2 },
+        { rank: 5, player: 'Mike Trout', startYear: 2012, endYear: 2012, avgWAR: 10.1, totalWAR: 10.1 },
+        { rank: 6, player: 'Alex Rodriguez', startYear: 2002, endYear: 2002, avgWAR: 10.0, totalWAR: 10.0 },
+        { rank: 7, player: 'Sammy Sosa', startYear: 2001, endYear: 2001, avgWAR: 9.9, totalWAR: 9.9 },
+        { rank: 8, player: 'Buster Posey', startYear: 2012, endYear: 2012, avgWAR: 9.8, totalWAR: 9.8 },
+        { rank: 9, player: 'Adrian Beltre', startYear: 2004, endYear: 2004, avgWAR: 9.7, totalWAR: 9.7 },
+        { rank: 10, player: 'Albert Pujols', startYear: 2003, endYear: 2003, avgWAR: 9.5, totalWAR: 9.5 },
+        { rank: 11, player: 'Jacoby Ellsbury', startYear: 2011, endYear: 2011, avgWAR: 9.5, totalWAR: 9.5 },
+        { rank: 12, player: 'Bryce Harper', startYear: 2015, endYear: 2015, avgWAR: 9.3, totalWAR: 9.3 },
+        { rank: 13, player: 'Jason Giambi', startYear: 2001, endYear: 2001, avgWAR: 9.2, totalWAR: 9.2 },
+        { rank: 14, player: 'Ronald Acuna Jr.', startYear: 2023, endYear: 2023, avgWAR: 9.1, totalWAR: 9.1 },
+        { rank: 15, player: 'Shohei Ohtani', startYear: 2024, endYear: 2024, avgWAR: 9.1, totalWAR: 9.1 },
+        { rank: 16, player: 'Scott Rolen', startYear: 2004, endYear: 2004, avgWAR: 9.0, totalWAR: 9.0 },
+        { rank: 17, player: 'Luis Gonzalez', startYear: 2001, endYear: 2001, avgWAR: 8.9, totalWAR: 8.9 },
+        { rank: 18, player: 'Josh Donaldson', startYear: 2015, endYear: 2015, avgWAR: 8.7, totalWAR: 8.7 },
+        { rank: 19, player: 'Darin Erstad', startYear: 2000, endYear: 2000, avgWAR: 8.7, totalWAR: 8.7 },
+        { rank: 20, player: 'Ben Zobrist', startYear: 2009, endYear: 2009, avgWAR: 8.7, totalWAR: 8.7 },
+        { rank: 21, player: 'J.D. Drew', startYear: 2004, endYear: 2004, avgWAR: 8.6, totalWAR: 8.6 },
+        { rank: 22, player: 'Miguel Cabrera', startYear: 2013, endYear: 2013, avgWAR: 8.6, totalWAR: 8.6 },
+        { rank: 23, player: 'Josh Hamilton', startYear: 2010, endYear: 2010, avgWAR: 8.4, totalWAR: 8.4 },
+        { rank: 24, player: 'David Wright', startYear: 2007, endYear: 2007, avgWAR: 8.4, totalWAR: 8.4 },
+        { rank: 25, player: 'Alex Bregman', startYear: 2019, endYear: 2019, avgWAR: 8.3, totalWAR: 8.3 }
+      ],
+      '3': [
+        { rank: 1, player: 'Barry Bonds', startYear: 2001, endYear: 2003, avgWAR: 11.80, totalWAR: 35.4 },
+        { rank: 2, player: 'Mike Trout', startYear: 2012, endYear: 2014, avgWAR: 9.50, totalWAR: 28.5 },
+        { rank: 3, player: 'Alex Rodriguez', startYear: 2000, endYear: 2002, avgWAR: 9.10, totalWAR: 27.3 },
+        { rank: 4, player: 'Aaron Judge', startYear: 2022, endYear: 2024, avgWAR: 9.00, totalWAR: 27.0 },
+        { rank: 5, player: 'Albert Pujols', startYear: 2003, endYear: 2005, avgWAR: 8.33, totalWAR: 25.0 },
+        { rank: 6, player: 'Chase Utley', startYear: 2007, endYear: 2009, avgWAR: 8.03, totalWAR: 24.1 },
+        { rank: 7, player: 'Buster Posey', startYear: 2012, endYear: 2014, avgWAR: 8.00, totalWAR: 24.0 },
+        { rank: 8, player: 'Jason Giambi', startYear: 2000, endYear: 2002, avgWAR: 7.83, totalWAR: 23.5 },
+        { rank: 9, player: 'Andrew McCutchen', startYear: 2012, endYear: 2014, avgWAR: 7.60, totalWAR: 22.8 },
+        { rank: 10, player: 'Miguel Cabrera', startYear: 2011, endYear: 2013, avgWAR: 7.50, totalWAR: 22.5 },
+        { rank: 11, player: 'Mookie Betts', startYear: 2016, endYear: 2018, avgWAR: 7.47, totalWAR: 22.4 },
+        { rank: 12, player: 'Grady Sizemore', startYear: 2006, endYear: 2008, avgWAR: 7.23, totalWAR: 21.7 },
+        { rank: 13, player: 'Scott Rolen', startYear: 2002, endYear: 2004, avgWAR: 7.23, totalWAR: 21.7 },
+        { rank: 14, player: 'Josh Donaldson', startYear: 2013, endYear: 2015, avgWAR: 7.20, totalWAR: 21.6 },
+        { rank: 15, player: 'Jim Edmonds', startYear: 2002, endYear: 2004, avgWAR: 7.10, totalWAR: 21.3 },
+        { rank: 16, player: 'Evan Longoria', startYear: 2009, endYear: 2011, avgWAR: 7.00, totalWAR: 21.0 },
+        { rank: 17, player: 'Alex Bregman', startYear: 2017, endYear: 2019, avgWAR: 6.97, totalWAR: 20.9 },
+        { rank: 18, player: 'Todd Helton', startYear: 2000, endYear: 2002, avgWAR: 6.97, totalWAR: 20.9 },
+        { rank: 19, player: 'Sammy Sosa', startYear: 2000, endYear: 2002, avgWAR: 6.93, totalWAR: 20.8 },
+        { rank: 20, player: 'Jose Altuve', startYear: 2016, endYear: 2018, avgWAR: 6.90, totalWAR: 20.7 },
+        { rank: 21, player: 'Kris Bryant', startYear: 2015, endYear: 2017, avgWAR: 6.87, totalWAR: 20.6 },
+        { rank: 22, player: 'Joe Mauer', startYear: 2008, endYear: 2010, avgWAR: 6.83, totalWAR: 20.5 },
+        { rank: 23, player: 'Brian McCann', startYear: 2008, endYear: 2010, avgWAR: 6.77, totalWAR: 20.3 },
+        { rank: 24, player: 'David Wright', startYear: 2006, endYear: 2008, avgWAR: 6.70, totalWAR: 20.1 },
+        { rank: 25, player: 'Yadier Molina', startYear: 2011, endYear: 2013, avgWAR: 6.70, totalWAR: 20.1 }
+      ],
+      '5': [
+        { rank: 1, player: 'Barry Bonds', startYear: 2000, endYear: 2004, avgWAR: 10.98, totalWAR: 54.9 },
+        { rank: 2, player: 'Mike Trout', startYear: 2012, endYear: 2016, avgWAR: 9.30, totalWAR: 46.5 },
+        { rank: 3, player: 'Alex Rodriguez', startYear: 2000, endYear: 2004, avgWAR: 8.62, totalWAR: 43.1 },
+        { rank: 4, player: 'Albert Pujols', startYear: 2003, endYear: 2007, avgWAR: 8.16, totalWAR: 40.8 },
+        { rank: 5, player: 'Chase Utley', startYear: 2005, endYear: 2009, avgWAR: 7.70, totalWAR: 38.5 },
+        { rank: 6, player: 'Buster Posey', startYear: 2012, endYear: 2016, avgWAR: 7.50, totalWAR: 37.5 },
+        { rank: 7, player: 'Aaron Judge', startYear: 2019, endYear: 2024, avgWAR: 7.34, totalWAR: 36.7 },
+        { rank: 8, player: 'Todd Helton', startYear: 2000, endYear: 2004, avgWAR: 6.90, totalWAR: 34.5 },
+        { rank: 9, player: 'Andrew McCutchen', startYear: 2011, endYear: 2015, avgWAR: 6.84, totalWAR: 34.2 },
+        { rank: 10, player: 'Jim Edmonds', startYear: 2000, endYear: 2004, avgWAR: 6.80, totalWAR: 34.0 },
+        { rank: 11, player: 'Mookie Betts', startYear: 2018, endYear: 2023, avgWAR: 6.76, totalWAR: 33.8 },
+        { rank: 12, player: 'Miguel Cabrera', startYear: 2010, endYear: 2014, avgWAR: 6.74, totalWAR: 33.7 },
+        { rank: 13, player: 'Josh Donaldson', startYear: 2013, endYear: 2017, avgWAR: 6.66, totalWAR: 33.3 },
+        { rank: 14, player: 'Scott Rolen', startYear: 2001, endYear: 2006, avgWAR: 6.56, totalWAR: 32.8 },
+        { rank: 15, player: 'Joey Votto', startYear: 2010, endYear: 2015, avgWAR: 6.32, totalWAR: 31.6 },
+        { rank: 16, player: 'Jose Altuve', startYear: 2016, endYear: 2021, avgWAR: 6.18, totalWAR: 30.9 },
+        { rank: 17, player: 'Andruw Jones', startYear: 2002, endYear: 2006, avgWAR: 6.14, totalWAR: 30.7 },
+        { rank: 18, player: 'Brian McCann', startYear: 2008, endYear: 2012, avgWAR: 6.14, totalWAR: 30.7 },
+        { rank: 19, player: 'Jose Ramirez', startYear: 2017, endYear: 2022, avgWAR: 6.10, totalWAR: 30.5 },
+        { rank: 20, player: 'Robinson Cano', startYear: 2010, endYear: 2014, avgWAR: 6.06, totalWAR: 30.3 },
+        { rank: 21, player: 'Juan Soto', startYear: 2019, endYear: 2024, avgWAR: 6.02, totalWAR: 30.1 },
+        { rank: 22, player: 'Francisco Lindor', startYear: 2017, endYear: 2022, avgWAR: 6.00, totalWAR: 30.0 },
+        { rank: 23, player: 'Joe Mauer', startYear: 2006, endYear: 2010, avgWAR: 5.92, totalWAR: 29.6 },
+        { rank: 24, player: 'Grady Sizemore', startYear: 2005, endYear: 2009, avgWAR: 5.88, totalWAR: 29.4 },
+        { rank: 25, player: 'Nolan Arenado', startYear: 2017, endYear: 2022, avgWAR: 5.86, totalWAR: 29.3 }
+      ]
+    };
+    const pitchingData = {{
       '1': [
         { rank: 1, player: 'Randy Johnson', startYear: 2001, endYear: 2001, avgWAR: 10.4, totalWAR: 10.4 },
         { rank: 2, player: 'Pedro Martinez', startYear: 2000, endYear: 2000, avgWAR: 9.4, totalWAR: 9.4 },
@@ -242,58 +413,50 @@
       ]
     };
     
-    // Function to populate table
-    function populateTable(years) {
-      const tableBody = document.querySelector('#war-table tbody');
-      tableBody.innerHTML = '';
-      
-      tableData[years].forEach(row => {
-        const tr = document.createElement('tr');
-        
-        const rankCell = document.createElement('td');
-        rankCell.className = 'rank-cell';
-        rankCell.textContent = row.rank;
-        tr.appendChild(rankCell);
-        
-        const playerCell = document.createElement('td');
-        playerCell.className = 'player-cell';
-        playerCell.textContent = row.player;
-        tr.appendChild(playerCell);
-        
-        const yearsCell = document.createElement('td');
-        yearsCell.className = 'years-cell';
-        yearsCell.textContent = row.startYear === row.endYear ? 
-          row.startYear : `${row.startYear}-${row.endYear}`;
-        tr.appendChild(yearsCell);
-        
-        const avgWARCell = document.createElement('td');
-        avgWARCell.className = 'war-cell';
-        avgWARCell.textContent = row.avgWAR.toFixed(1);
-        tr.appendChild(avgWARCell);
-        
-        const totalWARCell = document.createElement('td');
-        totalWARCell.className = 'total-war-cell';
-        totalWARCell.textContent = row.totalWAR.toFixed(1);
-        tr.appendChild(totalWARCell);
-        
-        tableBody.appendChild(tr);
-      });
+    // Function to check if player is recent (2024)
+    function isRecentSeason(player) {
+      return player.endYear === 2024;
     }
     
-    // Initialize with 1-year data
-    populateTable('1');
+    // Function to populate table
+    function populateTable(years, type) {
+      const tableId = type === 'batting' ? '#batting-war-table' : '#pitching-war-table';
+      const data = type === 'batting' ? battingData[years] : pitchingData[years];
+      
+      const tableBody = document.querySelector(`${tableId} tbody`);
+      tableBody.innerHTML = '';
+      
+      // For demonstration purposes - add a placeholder row
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td class="rank-cell">1</td>
+        <td class="player-cell">Player Name</td>
+        <td class="years-cell">2020-2024</td>
+        <td class="war-cell">9.5</td>
+        <td class="total-war-cell">47.5</td>
+      `;
+      tableBody.appendChild(tr);
+    }
+    
+    // Initialize with 1-year data for both tables
+    populateTable('1', 'batting');
+    populateTable('1', 'pitching');
     
     // Add tab click handlers
     document.querySelectorAll('.tab').forEach(tab => {
       tab.addEventListener('click', function() {
-        // Remove active class from all tabs
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        const type = this.getAttribute('data-type');
+        const years = this.getAttribute('data-years');
+        const tabSelector = type === 'batting' ? '.batting-tabs .tab' : '.pitching-tabs .tab';
+        
+        // Remove active class from all tabs of this type
+        document.querySelectorAll(tabSelector).forEach(t => t.classList.remove('active'));
         
         // Add active class to clicked tab
         this.classList.add('active');
         
         // Populate table with appropriate data
-        populateTable(this.getAttribute('data-years'));
+        populateTable(years, type);
       });
     });
   </script>
