@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Top Pitching WAR Stretches</title>
+  <style>
+    body {
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      max-width: 750px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f5f5f5;
+      color: #333;
+    }
+    
+    h1 {
+      font-weight: bold;
+      font-size: 24px;
+      margin-bottom: 5px;
+      color: #111;
+    }
+    
+    .subtitle {
+      font-size: 16px;
+      color: #666;
+      margin-bottom: 20px;
+    }
+    
+    .container {
+      background-color: white;
+      border-radius: 4px;
+      padding: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    .tabs {
+      display: flex;
+      margin-bottom: 20px;
+      border-bottom: 3px solid #f0f0f0;
+    }
+    
+    .tab {
+      padding: 12px 24px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 16px;
+      color: #666;
+      position: relative;
+    }
+    
+    .tab.active {
+      color: #ff6310;
+    }
+    
+    .tab.active:after {
+      content: '';
+      position: absolute;
+      bottom: -3px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background-color: #ff6310;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 15px;
+    }
+    
+    thead {
+      border-bottom: 2px solid #ddd;
+    }
+    
+    th {
+      text-align: left;
+      padding: 12px 8px;
+      font-weight: bold;
+      color: #333;
+    }
+    
+    td {
+      padding: 14px 8px;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .table-container {
+      max-height: 500px;
+      overflow-y: auto;
+    }
+    
+    .rank-cell {
+      font-weight: bold;
+      width: 50px;
+      color: #666;
+    }
+    
+    .player-cell {
+      font-weight: bold;
+    }
+    
+    .years-cell {
+      color: #666;
+    }
+    
+    .war-cell {
+      font-weight: bold;
+      text-align: right;
+      color: #ff6310;
+    }
+    
+    .total-war-cell {
+      text-align: right;
+    }
+    
+    .footer-note {
+      margin-top: 20px;
+      font-size: 13px;
+      color: #888;
+      font-style: italic;
+    }
+    
+    tr:hover {
+      background-color: #f9f9f9;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Top Pitching WAR Stretches (2000-2024)</h1>
+    <div class="subtitle">Best single-season and multi-year pitching performances by WAR</div>
+    
+    <div class="tabs">
+      <div class="tab active" data-years="1">1-Year Peak</div>
+      <div class="tab" data-years="3">3-Year Peak</div>
+      <div class="tab" data-years="5">5-Year Peak</div>
+    </div>
+    
+    <div class="table-container">
+      <table id="war-table">
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Player</th>
+            <th>Years</th>
+            <th>Avg. WAR</th>
+            <th>Total WAR</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    
+    <div class="footer-note">
+      Data represents the best WAR stretches for MLB pitchers since 2000.
+    </div>
+  </div>
+
+  <script>
+    // Data for each table
+    const tableData = {
+      '1': [
+        { rank: 1, player: 'Randy Johnson', startYear: 2001, endYear: 2001, avgWAR: 10.4, totalWAR: 10.4 },
+        { rank: 2, player: 'Pedro Martinez', startYear: 2000, endYear: 2000, avgWAR: 9.4, totalWAR: 9.4 },
+        { rank: 3, player: 'Curt Schilling', startYear: 2002, endYear: 2002, avgWAR: 9.3, totalWAR: 9.3 },
+        { rank: 4, player: 'Jacob deGrom', startYear: 2018, endYear: 2018, avgWAR: 9.0, totalWAR: 9.0 },
+        { rank: 5, player: 'Zack Greinke', startYear: 2009, endYear: 2009, avgWAR: 8.7, totalWAR: 8.7 },
+        { rank: 6, player: 'Roy Halladay', startYear: 2011, endYear: 2011, avgWAR: 8.7, totalWAR: 8.7 },
+        { rank: 7, player: 'Clayton Kershaw', startYear: 2015, endYear: 2015, avgWAR: 8.6, totalWAR: 8.6 },
+        { rank: 8, player: 'Justin Verlander', startYear: 2009, endYear: 2009, avgWAR: 8.4, totalWAR: 8.4 },
+        { rank: 9, player: 'Ben Sheets', startYear: 2004, endYear: 2004, avgWAR: 8.0, totalWAR: 8.0 },
+        { rank: 10, player: 'Mark Prior', startYear: 2003, endYear: 2003, avgWAR: 7.8, totalWAR: 7.8 },
+        { rank: 11, player: 'Chris Sale', startYear: 2017, endYear: 2017, avgWAR: 7.6, totalWAR: 7.6 },
+        { rank: 12, player: 'Tim Lincecum', startYear: 2009, endYear: 2009, avgWAR: 7.6, totalWAR: 7.6 },
+        { rank: 13, player: 'Gerrit Cole', startYear: 2019, endYear: 2019, avgWAR: 7.5, totalWAR: 7.5 },
+        { rank: 14, player: 'Max Scherzer', startYear: 2018, endYear: 2018, avgWAR: 7.5, totalWAR: 7.5 },
+        { rank: 15, player: 'Corbin Burnes', startYear: 2021, endYear: 2021, avgWAR: 7.5, totalWAR: 7.5 },
+        { rank: 16, player: 'Cliff Lee', startYear: 2010, endYear: 2010, avgWAR: 7.3, totalWAR: 7.3 },
+        { rank: 17, player: 'CC Sabathia', startYear: 2008, endYear: 2008, avgWAR: 7.3, totalWAR: 7.3 },
+        { rank: 18, player: 'Greg Maddux', startYear: 2000, endYear: 2000, avgWAR: 7.2, totalWAR: 7.2 },
+        { rank: 19, player: 'Zack Wheeler', startYear: 2021, endYear: 2021, avgWAR: 7.2, totalWAR: 7.2 },
+        { rank: 20, player: 'Corey Kluber', startYear: 2014, endYear: 2014, avgWAR: 7.2, totalWAR: 7.2 },
+        { rank: 21, player: 'Johan Santana', startYear: 2005, endYear: 2005, avgWAR: 7.1, totalWAR: 7.1 },
+        { rank: 22, player: 'Jake Arrieta', startYear: 2015, endYear: 2015, avgWAR: 7.0, totalWAR: 7.0 },
+        { rank: 23, player: 'Felix Hernandez', startYear: 2009, endYear: 2009, avgWAR: 6.9, totalWAR: 6.9 },
+        { rank: 24, player: 'Esteban Loaiza', startYear: 2003, endYear: 2003, avgWAR: 6.9, totalWAR: 6.9 },
+        { rank: 25, player: 'Matt Harvey', startYear: 2013, endYear: 2013, avgWAR: 6.9, totalWAR: 6.9 }
+      ],
+      '3': [
+        { rank: 1, player: 'Randy Johnson', startYear: 2000, endYear: 2002, avgWAR: 9.37, totalWAR: 28.1 },
+        { rank: 2, player: 'Clayton Kershaw', startYear: 2013, endYear: 2015, avgWAR: 7.90, totalWAR: 23.7 },
+        { rank: 3, player: 'Pedro Martinez', startYear: 2000, endYear: 2002, avgWAR: 7.43, totalWAR: 22.3 },
+        { rank: 4, player: 'Curt Schilling', startYear: 2001, endYear: 2003, avgWAR: 7.37, totalWAR: 22.1 },
+        { rank: 5, player: 'Roy Halladay', startYear: 2009, endYear: 2011, avgWAR: 7.23, totalWAR: 21.7 },
+        { rank: 6, player: 'Justin Verlander', startYear: 2009, endYear: 2011, avgWAR: 7.20, totalWAR: 21.6 },
+        { rank: 7, player: 'Cliff Lee', startYear: 2009, endYear: 2011, avgWAR: 6.93, totalWAR: 20.8 },
+        { rank: 8, player: 'Johan Santana', startYear: 2004, endYear: 2006, avgWAR: 6.87, totalWAR: 20.6 },
+        { rank: 9, player: 'Max Scherzer', startYear: 2017, endYear: 2019, avgWAR: 6.80, totalWAR: 20.4 },
+        { rank: 10, player: 'Jacob deGrom', startYear: 2017, endYear: 2019, avgWAR: 6.67, totalWAR: 20.0 },
+        { rank: 11, player: 'CC Sabathia', startYear: 2007, endYear: 2009, avgWAR: 6.50, totalWAR: 19.5 },
+        { rank: 12, player: 'Chris Sale', startYear: 2016, endYear: 2018, avgWAR: 6.37, totalWAR: 19.1 },
+        { rank: 13, player: 'Tim Lincecum', startYear: 2008, endYear: 2010, avgWAR: 6.33, totalWAR: 19.0 },
+        { rank: 14, player: 'Felix Hernandez', startYear: 2009, endYear: 2011, avgWAR: 6.30, totalWAR: 18.9 },
+        { rank: 15, player: 'Roy Oswalt', startYear: 2004, endYear: 2006, avgWAR: 6.27, totalWAR: 18.8 },
+        { rank: 16, player: 'Brandon Webb', startYear: 2006, endYear: 2008, avgWAR: 6.07, totalWAR: 18.2 },
+        { rank: 17, player: 'Mike Mussina', startYear: 2000, endYear: 2002, avgWAR: 5.93, totalWAR: 17.8 },
+        { rank: 18, player: 'Zack Greinke', startYear: 2008, endYear: 2010, avgWAR: 5.93, totalWAR: 17.8 },
+        { rank: 19, player: 'Corey Kluber', startYear: 2014, endYear: 2016, avgWAR: 5.90, totalWAR: 17.7 },
+        { rank: 20, player: 'Jason Schmidt', startYear: 2002, endYear: 2004, avgWAR: 5.83, totalWAR: 17.5 },
+        { rank: 21, player: 'Greg Maddux', startYear: 2000, endYear: 2002, avgWAR: 5.83, totalWAR: 17.5 },
+        { rank: 22, player: 'Zack Wheeler', startYear: 2021, endYear: 2023, avgWAR: 5.77, totalWAR: 17.3 },
+        { rank: 23, player: 'Gerrit Cole', startYear: 2017, endYear: 2019, avgWAR: 5.60, totalWAR: 16.8 },
+        { rank: 24, player: 'David Price', startYear: 2014, endYear: 2016, avgWAR: 5.57, totalWAR: 16.7 },
+        { rank: 25, player: 'Javier Vazquez', startYear: 2001, endYear: 2003, avgWAR: 5.57, totalWAR: 16.7 }
+      ],
+      '5': [
+        { rank: 1, player: 'Randy Johnson', startYear: 2000, endYear: 2004, avgWAR: 8.02, totalWAR: 40.1 },
+        { rank: 2, player: 'Clayton Kershaw', startYear: 2011, endYear: 2015, avgWAR: 7.42, totalWAR: 37.1 },
+        { rank: 3, player: 'Pedro Martinez', startYear: 2000, endYear: 2004, avgWAR: 6.92, totalWAR: 34.6 },
+        { rank: 4, player: 'Roy Halladay', startYear: 2007, endYear: 2011, avgWAR: 6.70, totalWAR: 33.5 },
+        { rank: 5, player: 'Justin Verlander', startYear: 2009, endYear: 2013, avgWAR: 6.66, totalWAR: 33.3 },
+        { rank: 6, player: 'Curt Schilling', startYear: 2000, endYear: 2004, avgWAR: 6.64, totalWAR: 33.2 },
+        { rank: 7, player: 'Cliff Lee', startYear: 2008, endYear: 2012, avgWAR: 6.50, totalWAR: 32.5 },
+        { rank: 8, player: 'Max Scherzer', startYear: 2015, endYear: 2019, avgWAR: 6.50, totalWAR: 32.5 },
+        { rank: 9, player: 'Felix Hernandez', startYear: 2009, endYear: 2013, avgWAR: 6.32, totalWAR: 31.6 },
+        { rank: 10, player: 'CC Sabathia', startYear: 2007, endYear: 2011, avgWAR: 6.16, totalWAR: 30.8 },
+        { rank: 11, player: 'Corey Kluber', startYear: 2014, endYear: 2018, avgWAR: 6.08, totalWAR: 30.4 },
+        { rank: 12, player: 'Johan Santana', startYear: 2004, endYear: 2008, avgWAR: 5.96, totalWAR: 29.8 },
+        { rank: 13, player: 'Chris Sale', startYear: 2014, endYear: 2018, avgWAR: 5.94, totalWAR: 29.7 },
+        { rank: 14, player: 'Jacob deGrom', startYear: 2015, endYear: 2019, avgWAR: 5.56, totalWAR: 27.8 },
+        { rank: 15, player: 'Roy Oswalt', startYear: 2002, endYear: 2006, avgWAR: 5.52, totalWAR: 27.6 },
+        { rank: 16, player: 'Mike Mussina', startYear: 2000, endYear: 2004, avgWAR: 5.38, totalWAR: 26.9 },
+        { rank: 17, player: 'Roger Clemens', startYear: 2001, endYear: 2005, avgWAR: 5.22, totalWAR: 26.1 },
+        { rank: 18, player: 'Zack Greinke', startYear: 2008, endYear: 2012, avgWAR: 5.18, totalWAR: 25.9 },
+        { rank: 19, player: 'Dan Haren', startYear: 2007, endYear: 2011, avgWAR: 5.14, totalWAR: 25.7 },
+        { rank: 20, player: 'Brandon Webb', startYear: 2004, endYear: 2008, avgWAR: 5.12, totalWAR: 25.6 },
+        { rank: 21, player: 'Tim Lincecum', startYear: 2007, endYear: 2011, avgWAR: 5.10, totalWAR: 25.5 },
+        { rank: 22, player: 'Adam Wainwright', startYear: 2009, endYear: 2014, avgWAR: 5.08, totalWAR: 25.4 },
+        { rank: 23, player: 'David Price', startYear: 2011, endYear: 2015, avgWAR: 5.08, totalWAR: 25.4 },
+        { rank: 24, player: 'Zack Wheeler', startYear: 2020, endYear: 2024, avgWAR: 4.92, totalWAR: 24.6 },
+        { rank: 25, player: 'Gerrit Cole', startYear: 2015, endYear: 2019, avgWAR: 4.88, totalWAR: 24.4 }
+      ]
+    };
+    
+    // Function to populate table
+    function populateTable(years) {
+      const tableBody = document.querySelector('#war-table tbody');
+      tableBody.innerHTML = '';
+      
+      tableData[years].forEach(row => {
+        const tr = document.createElement('tr');
+        
+        const rankCell = document.createElement('td');
+        rankCell.className = 'rank-cell';
+        rankCell.textContent = row.rank;
+        tr.appendChild(rankCell);
+        
+        const playerCell = document.createElement('td');
+        playerCell.className = 'player-cell';
+        playerCell.textContent = row.player;
+        tr.appendChild(playerCell);
+        
+        const yearsCell = document.createElement('td');
+        yearsCell.className = 'years-cell';
+        yearsCell.textContent = row.startYear === row.endYear ? 
+          row.startYear : `${row.startYear}-${row.endYear}`;
+        tr.appendChild(yearsCell);
+        
+        const avgWARCell = document.createElement('td');
+        avgWARCell.className = 'war-cell';
+        avgWARCell.textContent = row.avgWAR.toFixed(1);
+        tr.appendChild(avgWARCell);
+        
+        const totalWARCell = document.createElement('td');
+        totalWARCell.className = 'total-war-cell';
+        totalWARCell.textContent = row.totalWAR.toFixed(1);
+        tr.appendChild(totalWARCell);
+        
+        tableBody.appendChild(tr);
+      });
+    }
+    
+    // Initialize with 1-year data
+    populateTable('1');
+    
+    // Add tab click handlers
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', function() {
+        // Remove active class from all tabs
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        
+        // Add active class to clicked tab
+        this.classList.add('active');
+        
+        // Populate table with appropriate data
+        populateTable(this.getAttribute('data-years'));
+      });
+    });
+  </script>
+</body>
+</html>
