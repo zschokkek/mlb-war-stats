@@ -105,6 +105,10 @@ table {
 th:nth-child(2), td:nth-child(2) { width: 40%; } /* Player column */
 th:nth-child(3), td:nth-child(3) { width: 25%; } /* Years column */
 th:nth-child(4), td:nth-child(4) { width: calc(35% - 25px); } /* WAR column */
+    /* Right-align the fourth column header (WAR column) */
+th:nth-child(4) {
+  text-align: right !important;
+}
     
 thead {
   position: sticky;
