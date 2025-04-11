@@ -413,52 +413,80 @@
       ]
     };
     
-    // Function to check if player is recent (2024)
-    function isRecentSeason(player) {
-      return player.endYear === 2024;
+  // Function to check if player is recent (2024)
+function isRecentSeason(player) {
+  return player.endYear === 2024;
+}
+
+// Function to populate table
+function populateTable(years, type) {
+  const tableId = type === 'batting' ? '#batting-war-table' : '#pitching-war-table';
+  const data = type === 'batting' ? battingData[years] : pitchingData[years];
+  
+  const tableBody = document.querySelector(`${tableId} tbody`);
+  tableBody.innerHTML = '';
+  
+  // Iterate through all the data and create rows
+  data.forEach(row => {
+    const tr = document.createElement('tr');
+    
+    // Add highlight class for 2024 players (only for batting)
+    if (type === 'batting' && isRecentSeason(row)) {
+      tr.classList.add('highlight-row');
     }
     
-    // Function to populate table
-    function populateTable(years, type) {
-      const tableId = type === 'batting' ? '#batting-war-table' : '#pitching-war-table';
-      const data = type === 'batting' ? battingData[years] : pitchingData[years];
-      
-      const tableBody = document.querySelector(`${tableId} tbody`);
-      tableBody.innerHTML = '';
-      
-      // For demonstration purposes - add a placeholder row
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td class="rank-cell">1</td>
-        <td class="player-cell">Player Name</td>
-        <td class="years-cell">2020-2024</td>
-        <td class="war-cell">9.5</td>
-        <td class="total-war-cell">47.5</td>
-      `;
-      tableBody.appendChild(tr);
-    }
+    // Create each cell in the row
+    const rankCell = document.createElement('td');
+    rankCell.className = 'rank-cell';
+    rankCell.textContent = row.rank;
+    tr.appendChild(rankCell);
     
-    // Initialize with 1-year data for both tables
-    populateTable('1', 'batting');
-    populateTable('1', 'pitching');
+    const playerCell = document.createElement('td');
+    playerCell.className = 'player-cell';
+    playerCell.textContent = row.player;
+    tr.appendChild(playerCell);
     
-    // Add tab click handlers
-    document.querySelectorAll('.tab').forEach(tab => {
-      tab.addEventListener('click', function() {
-        const type = this.getAttribute('data-type');
-        const years = this.getAttribute('data-years');
-        const tabSelector = type === 'batting' ? '.batting-tabs .tab' : '.pitching-tabs .tab';
-        
-        // Remove active class from all tabs of this type
-        document.querySelectorAll(tabSelector).forEach(t => t.classList.remove('active'));
-        
-        // Add active class to clicked tab
-        this.classList.add('active');
-        
-        // Populate table with appropriate data
-        populateTable(years, type);
-      });
-    });
+    const yearsCell = document.createElement('td');
+    yearsCell.className = 'years-cell';
+    yearsCell.textContent = row.startYear === row.endYear ? 
+      row.startYear : `${row.startYear}-${row.endYear}`;
+    tr.appendChild(yearsCell);
+    
+    const avgWARCell = document.createElement('td');
+    avgWARCell.className = 'war-cell';
+    avgWARCell.textContent = Number(row.avgWAR).toFixed(1);
+    tr.appendChild(avgWARCell);
+    
+    const totalWARCell = document.createElement('td');
+    totalWARCell.className = 'total-war-cell';
+    totalWARCell.textContent = Number(row.totalWAR).toFixed(1);
+    tr.appendChild(totalWARCell);
+    
+    tableBody.appendChild(tr);
+  });
+}
+
+// Initialize with 1-year data for both tables
+populateTable('1', 'batting');
+populateTable('1', 'pitching');
+
+// Add tab click handlers
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', function() {
+    const type = this.getAttribute('data-type');
+    const years = this.getAttribute('data-years');
+    const tabSelector = type === 'batting' ? '.batting-tabs .tab' : '.pitching-tabs .tab';
+    
+    // Remove active class from all tabs of this type
+    document.querySelectorAll(tabSelector).forEach(t => t.classList.remove('active'));
+    
+    // Add active class to clicked tab
+    this.classList.add('active');
+    
+    // Populate table with appropriate data
+    populateTable(years, type);
+  });
+});
   </script>
 </body>
 </html>
