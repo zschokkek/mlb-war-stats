@@ -453,11 +453,6 @@ function populateTable(years, type) {
     avgWARCell.textContent = Number(row.avgWAR).toFixed(1);
     tr.appendChild(avgWARCell);
     
-    const totalWARCell = document.createElement('td');
-    totalWARCell.className = 'total-war-cell';
-    totalWARCell.textContent = Number(row.totalWAR).toFixed(1);
-    tr.appendChild(totalWARCell);
-    
     tableBody.appendChild(tr);
   });
 }
