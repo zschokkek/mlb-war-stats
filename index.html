@@ -101,17 +101,25 @@ table {
 }
 
 thead {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: white; /* Match your background color */
   border-bottom: 2px solid #ddd;
 }
 
 th {
+  position: sticky;
+  top: 0;
+  background-color: white; /* Match your background color */
   text-align: left;
-  padding: 8px 6px; /* Smaller padding */
+  padding: 8px 6px;
   font-weight: bold;
   color: #333;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  z-index: 10;
 }
 
 td {
