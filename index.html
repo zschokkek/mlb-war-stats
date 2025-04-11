@@ -137,8 +137,11 @@ td {
 
 .rank-cell {
   font-weight: bold;
-  width: 20px; /* Smaller */
+  width: 20px; /* Reduce from current 40px to a smaller value */
+  min-width: 20px; /* Add min-width to enforce the narrow size */
+  max-width: 20px; /* Add max-width to prevent expansion */
   color: #666;
+  text-align: center; /* Optional: center the rank numbers */
 }
 
 .player-cell {
